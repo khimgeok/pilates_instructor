@@ -38,6 +38,7 @@ research_workout_task:
     to sequence directly into a 60-minute program without re-sorting.
 
   agent: pilates_researcher
+  output_file: output/research_workout.md
 
 
 plan_routine_task:
@@ -75,6 +76,7 @@ plan_routine_task:
   agent: workout_planner
   context:
     - research_workout_task
+  output_file: output/workout_plan.md
 
 
 generate_audio_script_task:
@@ -137,5 +139,5 @@ generate_audio_script_task:
     Within-block transitions positional only. Written entirely in second
     person. No vague cues. Ready for direct text-to-speech conversion
     without editing.
-
+  output_file: output/pilates_workout_script.md
 
