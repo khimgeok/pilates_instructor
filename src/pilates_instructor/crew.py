@@ -31,6 +31,10 @@ class PilatesInstructor():
         return Task(config=self.tasks_config['research_workout_task'])
 
     @task
+    def plan_routine_task(self) -> Task:
+        return Task(config=self.tasks_config['plan_routine_task'])
+
+    @task
     def generate_audio_script_task(self) -> Task:
         return Task(config=self.tasks_config['generate_audio_script_task'], output_file='script.md')
 
