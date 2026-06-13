@@ -28,15 +28,22 @@ class PilatesInstructor():
 
     @task
     def research_workout_task(self) -> Task:
-        return Task(config=self.tasks_config['research_workout_task'])
+        return Task(config=self.tasks_config['research_workout_task'],
+                    agent= self.pilates_researcher()
+                    )
 
     @task
     def plan_routine_task(self) -> Task:
-        return Task(config=self.tasks_config['plan_routine_task'])
+        return Task(config=self.tasks_config['plan_routine_task'],
+                    agent =self.workout_planner()
+                    )
 
     @task
     def generate_audio_script_task(self) -> Task:
-        return Task(config=self.tasks_config['generate_audio_script_task'], output_file='script.md')
+        return Task(config=self.tasks_config['generate_audio_script_task'],
+                    output_file='script.md',
+                    agent = self.pilates_instructor()
+                    )
 
     @crew
     def crew(self) -> Crew:
