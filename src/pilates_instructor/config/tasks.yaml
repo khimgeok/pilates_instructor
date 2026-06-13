@@ -1,0 +1,141 @@
+research_workout_task:
+  description: >
+    Research and curate 20-30 Pilates reformer exercises for a 60-minute
+    stacked block session for full body workout. Begin with the internal CSV repository in ./data/Pilates.csv, then
+    cross-reference with web research to identify variations and emerging
+    rehabilitation protocols — particularly for spondylolysis, lumbar
+    instability, and postural dysfunction.
+
+    Organise output into muscle group blocks of exactly 3 exercises each.
+    Every block must:
+    - Share the same reformer configuration across all 3 exercises
+    - Progress in difficulty: foundational → progression → peak
+    - Target the same primary muscle group with meaningful variation
+
+    For each exercise provide:
+    1. EXERCISE NAME — standard name and alternatives
+    2. MUSCLE GROUP — primary and secondary in plain language
+    3. REFORMER CONFIGURATION — spring load, footbar, box (short/long/none),
+       platform extender (on/off), headrest, straps
+    4. DIFFICULTY LEVEL — foundational / progression / peak
+    5. BLOCK POSITION — slot 1, 2, or 3
+    6. EVIDENCE BASE — rehabilitation relevance for spondylolysis or
+       postural correction
+    7. CONTRAINDICATIONS — flags for lower back, hip, or shoulder limitations
+       with recommended modification
+    8. SOURCE — CSV / web research / cross-referenced
+
+    Prefix flags:
+    - CAUTION — spondylolysis or lower back contraindication
+    - SETUP EXCEPTION — spring configuration must change within a block
+    - UNVALIDATED — web-sourced, not yet verified against CSV
+
+  expected_output: >
+    A block-organised exercise brief of 6-10 muscle group blocks, each
+    containing exactly 3 stacked exercises sharing the same reformer
+    configuration. All CAUTION, SETUP EXCEPTION, and UNVALIDATED flags
+    must be clearly marked. Output must be ready for the Planner Agent
+    to sequence directly into a 60-minute program without re-sorting.
+
+  agent: pilates_researcher
+
+
+plan_routine_task:
+  description: >
+    Using the researcher's block-organised exercise brief, design a precise
+    60-minute Pilates reformer session full body workout. If feedback constraints from a prior
+    session are available, incorporate them to adjust block selection, exercise
+    swaps, or intensity.
+
+    Session structure:
+    - Warm-Up (5-7 min)
+    - Block 1 (12-15 min) + Rest (45 seconds to 1 min)
+    - Block 2 (15-20 min) + Rest (1-1.5 min)
+    - Block 3 (15-20 min) + Rest (1-1.5 min)
+    - Cool-Down (5-8 min)
+
+    For each block specify:
+    - Shared reformer configuration (stated once per block)
+    - 3 exercises with: name, alternative, primary and secondary muscles,
+      duration, reps/sets, intensity label (Warm-Up/Easy/Medium/Hard/Cool-Down)
+    - Transition note between exercises (positional only, no setup changes)
+    - Transition note between blocks (including any setup changes)
+    - Cumulative time tracker per exercise (running clock 0:00 → 60:00)
+
+    Document reasoning for any CAUTION, SETUP EXCEPTION, or UNVALIDATED
+    exercises — whether included, modified, or substituted.
+
+  expected_output: >
+    A fully structured 60-minute session plan with a running cumulative time
+    tracker. Organised into Warm-Up, 3 stacked blocks with shared reformer
+    configuration stated once per block, and Cool-Down. Total must not exceed
+    60 minutes. Output must be detailed enough for the Instructor Agent to
+    write a complete audio script without requiring additional information.
+
+  agent: workout_planner
+  context:
+    - research_workout_task
+
+
+generate_audio_script_task:
+  description: >
+    Transform the 60-minute session plan from the Planner Agent into a
+    complete audio script for independent solo use. Write entirely in second
+    person, warm and encouraging in tone, with no vague cues and no
+    unreferenced directional instructions.
+
+    Script structure:
+
+    SESSION OPENING (30-45 sec):
+    - Welcome, session focus and block overview
+    - Body check-in and breathing reset
+
+    For each BLOCK:
+
+      BLOCK INTRODUCTION:
+      - Name the muscle group focus
+      - State the full reformer setup and repeat it a second time
+        (spring load, footbar, box, platform extender, headrest, straps,
+        footstrap check)
+      - Remind student to verify spring tension before loading
+
+      For each EXERCISE (in order):
+      1. TRANSITION CUE — positional only, no setup changes within a block
+      2. STARTING POSITION — body placement, grip, alignment, spine confirmation
+      3. MOVEMENT INSTRUCTION — step-by-step with inhale/exhale cues and
+         breath counts tied to each movement phase
+      4. PRECISION REMINDERS — 2-3 mistakes written as sensation cues
+         ("feel your..." not "don't do...")
+      5. TARGETED MUSCLES — plain language with anatomical name alongside
+      6. REPETITIONS & TEMPO — rep count, pace, breath count per rep
+      7. MODIFICATION OPTION — labelled regression; use HEADS UP prefix
+         for spondylolysis or lower back caution
+      8. CLOSING CUE — reset or body awareness cue
+
+      For the THIRD (peak) exercise in every block, add before starting:
+      "Before we begin, take a moment to assess how your [muscle group]
+      feels. If fatigue is significant, stay with Exercise 2 for this
+      round — that is always the right choice."
+
+      BLOCK CLOSING:
+      - 45 seconds to 1 minute active rest with guided breath
+      - Water break reminder
+      - Reflection prompt ("notice how your [muscle group] feels now
+        compared to when we started this block")
+      - Preview of next block's muscle group and any setup changes needed
+
+    COOL-DOWN NARRATIVE:
+    - Full breath and positioning cues for each stretch
+    - Acknowledge work done in each block by name
+    - Close with grounding breath sequence and session sign-off
+
+  expected_output: >
+    A complete audio script covering the full 60-minute session: SESSION
+    OPENING, 3 BLOCKS each with BLOCK INTRODUCTION, 3 exercise sections
+    in the correct order, and BLOCK CLOSING, followed by COOL-DOWN NARRATIVE.
+    Reformer setup stated in BLOCK INTRODUCTION only and repeated twice.
+    Within-block transitions positional only. Written entirely in second
+    person. No vague cues. Ready for direct text-to-speech conversion
+    without editing.
+
+
