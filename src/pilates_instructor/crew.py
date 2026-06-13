@@ -41,7 +41,6 @@ class PilatesInstructor():
     @task
     def generate_audio_script_task(self) -> Task:
         return Task(config=self.tasks_config['generate_audio_script_task'],
-                    output_file='script.md',
                     agent = self.pilates_instructor()
                     )
 
